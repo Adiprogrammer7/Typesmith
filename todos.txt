@@ -1,0 +1,7 @@
+- Plan out potential required classes, structure, diagrams
+- generating random text on restart, maybe use json to load different texts.
+- planning out start and endgame
+- Testing the different sound packs
+
+so we will start timer when user starts typing and we will stop when time duration is over
+meanwhile we need a way to automatically load new text when previous text is over

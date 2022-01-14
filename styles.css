@@ -1,0 +1,41 @@
+/* .cursor{
+	animation-name: blink_cursor;
+	animation-duration: 1.3s;
+	animation-iteration-count: infinite;
+
+}
+@keyframes blink_cursor{
+	0% {
+		background-color: none;
+	}
+	100% {
+		background-color: gold;
+	}
+} */
+
+body{
+	font-family: monospace;
+}
+
+#para{
+	white-space: pre-wrap;
+}
+
+.cursor{
+	background-color: darkslategrey;
+	padding: 1px;
+	color: white;
+}
+
+/* .block_cursor{
+	border: 2px solid black;
+} */
+
+.warn_char{
+	color: red;
+	text-decoration: underline;
+}
+
+.done_char{
+	color: grey;
+}
