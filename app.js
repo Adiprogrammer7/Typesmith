@@ -1,14 +1,35 @@
 const p = document.getElementById("para");
-const sample_text = "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Accusamus, odio excepturi autem quibusdam quod eligendi voluptates reprehenderit quos dolores aspernatur modi consequuntur minima ratione aut labore perspiciatis laudantium provident architecto";
-const chars = sample_text.split("");
 const blacklist_chars = ['Shift', 'CapsLock', 'Control', 'Alt', 'Meta', 'Backspace', 'Enter'];
+const para_text = "Lolita, light of my life, fire of my loins. My sin, my soul. Lo-lee-ta: the tip of the tongue taking a trip of three steps down the palate to tap, at three, on the teeth. Lo. Lee. Ta."
+const quotable_url = "https://api.quotable.io/random?minLength=120&maxLength=400";
 
-// create span for each char and add it to html element
-for(let i = 0; i < chars.length; i++){
-	let span_tag = document.createElement('span');
-	span_tag.innerHTML = chars[i];
-	p.appendChild(span_tag);
+// // returns text fetched from quotable api, else returns lorem ipsum.
+// function fetch_text(url){
+// 	let fetched_text;
+// 	try{
+// 		$.getJSON(url, function(data){
+// 			fetched_text = data['content'];
+// 			console.log(fetched_text);
+// 		})
+// 	}
+// 	catch(e){
+// 		fetched_text = "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Accusamus, odio excepturi autem quibusdam quod eligendi voluptates reprehenderit quos dolores aspernatur modi consequuntur minima ratione aut labore perspiciatis laudantium provident architecto";
+// 		console.warn("Error while fetching from api: ", e);
+// 	}
+// 	return fetched_text;
+// }
+// const para_text = fetch_text(quotable_url);
+
+function span_chars(input_text){
+	const chars = input_text.split("");
+	// create span for each char and add it to html paragraph element
+	for(let i = 0; i < chars.length; i++){
+		let span_tag = document.createElement('span');
+		span_tag.innerHTML = chars[i];
+		p.appendChild(span_tag);
+	}
 }
+span_chars(para_text);
 
 let cursor_index = 0;
 let current_char = $("#para span")[cursor_index]
@@ -52,7 +73,4 @@ document.addEventListener('keydown', e => {
 			current_char.classList.add("cursor");
 		}
 	}
-	// else{
-	// 	console.log('nothing');
-	// }
 });
