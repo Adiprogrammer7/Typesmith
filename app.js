@@ -1,24 +1,6 @@
 const p = document.getElementById("para");
 const blacklist_chars = ['Shift', 'CapsLock', 'Control', 'Alt', 'Meta', 'Backspace', 'Enter'];
-const para_text = "Lolita, light of my life, fire of my loins. My sin, my soul. Lo-lee-ta: the tip of the tongue taking a trip of three steps down the palate to tap, at three, on the teeth. Lo. Lee. Ta."
-const quotable_url = "https://api.quotable.io/random?minLength=120&maxLength=400";
-
-// // returns text fetched from quotable api, else returns lorem ipsum.
-// function fetch_text(url){
-// 	let fetched_text;
-// 	try{
-// 		$.getJSON(url, function(data){
-// 			fetched_text = data['content'];
-// 			console.log(fetched_text);
-// 		})
-// 	}
-// 	catch(e){
-// 		fetched_text = "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Accusamus, odio excepturi autem quibusdam quod eligendi voluptates reprehenderit quos dolores aspernatur modi consequuntur minima ratione aut labore perspiciatis laudantium provident architecto";
-// 		console.warn("Error while fetching from api: ", e);
-// 	}
-// 	return fetched_text;
-// }
-// const para_text = fetch_text(quotable_url);
+const para_text = "Lolita, light of my life, fire of my loins. My sin, my soul. Lo-lee-ta: the tip of the tongue taking a trip of three steps down the palate to tap, at three, on the teeth. Lo. Lee. Ta.";
 
 function span_chars(input_text){
 	const chars = input_text.split("");
@@ -31,6 +13,7 @@ function span_chars(input_text){
 }
 span_chars(para_text);
 
+// initialization to the first char of typing text
 let cursor_index = 0;
 let current_char = $("#para span")[cursor_index]
 current_char.classList.add("cursor");
@@ -50,7 +33,7 @@ function cursor_forward(isRight){
 	current_char.classList.add("cursor");
 }
 
-document.addEventListener('keydown', e => {
+document.addEventListener('keydown', (e) => {
 	console.log(e.key);
 	// right character is pressed
 	if(e.key === current_char.innerText && !(blacklist_chars.includes(e.key))){

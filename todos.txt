@@ -1,7 +1,12 @@
-- Plan out potential required classes, structure, diagrams
-- generating random text on restart, maybe use json to load different texts.
-- planning out start and endgame
-- Testing the different sound packs
 
 so we will start timer when user starts typing and we will stop when time duration is over
 meanwhile we need a way to automatically load new text when previous text is over
+so, basically import export is for standard ES6 i.e. js in browser
+and require() is for commonjs like node on server side
+
+Todos:
+- serving up text dynamically
+- refer other's code and videos to find out how the heck js files will communicate and how to keep backend and browser js files separate
+- try using express server, and see if that could serve up local files and can import other js files
+- test out sound packs
+- code refactoring and use of classes
