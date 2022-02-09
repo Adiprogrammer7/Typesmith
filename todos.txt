@@ -3,6 +3,9 @@ so we will start timer when user starts typing and we will stop when time durati
 meanwhile we need a way to automatically load new text when previous text is over
 so, basically import export is for standard ES6 i.e. js in browser
 and require() is for commonjs like node on server side
+when promise is resolved then I should run the logic part
+until the promise gets resolved we will show some loading animation
+need to move some initialization to top
 
 Todos:
 - serving up text dynamically

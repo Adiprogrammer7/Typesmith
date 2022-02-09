@@ -1,23 +1,39 @@
 const p = document.getElementById("para");
 const blacklist_chars = ['Shift', 'CapsLock', 'Control', 'Alt', 'Meta', 'Backspace', 'Enter'];
-const para_text = "Lolita, light of my life, fire of my loins. My sin, my soul. Lo-lee-ta: the tip of the tongue taking a trip of three steps down the palate to tap, at three, on the teeth. Lo. Lee. Ta.";
 
+// initialization to the first char of typing text
+let cursor_index = 0;
+let current_char;
+let isRight = true;
+let para_text;
+
+// to fetch text from api
+const getData = async () => {
+	const response = await fetch('https://api.quotable.io/random?minLength=100&maxLength=600');
+	const data = await response.json();
+	return data;
+}
+getData().then((data) => {  //when promise is resolved
+	para_text = data['content'];
+	span_chars(para_text);
+	console.log(data['content']);
+}).catch((e) => {  //when error occurs
+	para_text = "its some error text";
+	span_chars(para_text);
+	console.log(e.message);
+});
+
+// create span for each char and add it to html paragraph element
 function span_chars(input_text){
 	const chars = input_text.split("");
-	// create span for each char and add it to html paragraph element
 	for(let i = 0; i < chars.length; i++){
 		let span_tag = document.createElement('span');
 		span_tag.innerHTML = chars[i];
 		p.appendChild(span_tag);
 	}
+	current_char = $("#para span")[cursor_index];
+	current_char.classList.add("cursor");
 }
-span_chars(para_text);
-
-// initialization to the first char of typing text
-let cursor_index = 0;
-let current_char = $("#para span")[cursor_index]
-current_char.classList.add("cursor");
-let isRight = true;
 
 // the way cursor will move to next char depending upon if right or wrong key was pressed
 function cursor_forward(isRight){
