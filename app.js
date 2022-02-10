@@ -1,7 +1,13 @@
 const p = document.getElementById("para");
+const timer_div = document.getElementById("timer");
 const blacklist_chars = ['Shift', 'CapsLock', 'Control', 'Alt', 'Meta', 'Backspace', 'Enter'];
 let current_char, para_text, para_len, cursor_index;
 let isRight = true;
+
+let isStarted = false;
+let min = 1;
+let sec = 10;
+timer_div.innerHTML =  String(min).padStart(2, '0') + " : " + String(sec).padStart(2, '0');
 
 // async code to fetch text from api
 const getData = async () => {
@@ -59,7 +65,33 @@ function cursor_forward(isRight){
 	}
 }
 
-document.addEventListener('keydown', (e) => {
+// to handle timer countdown
+function timer(min, sec){
+	const interval_id = setInterval(() => {
+		if(min == 0 && sec == 0){
+			console.log("timer done");
+			document.removeEventListener("keydown", typing_handler);
+			clearInterval(interval_id);
+		}
+		else if(sec == 0){
+			sec = 59;
+			min--;
+		}
+		else{
+			sec--;
+		}
+		//padStart() to have preceding 0 for single digit numbers.
+		timer_div.innerHTML = String(min).padStart(2, '0') + " : " + String(sec).padStart(2, '0'); 
+	}, 1000);
+}
+
+// Event handling function for typing
+function typing_handler(e){
+	// when first time started typing
+	if(!isStarted){
+		isStarted = true;
+		timer(min, sec);
+	}
 	// when current text is done typing
 	if(cursor_index === (para_len - 1)){
 		span_chars(para_text);
@@ -85,4 +117,6 @@ document.addEventListener('keydown', (e) => {
 			current_char.classList.add("cursor");
 		}
 	}
-});
+}
+
+document.addEventListener('keydown', typing_handler);
