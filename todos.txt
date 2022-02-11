@@ -1,9 +1,17 @@
-
-so we will start timer when user starts typing and we will stop when time duration is over
-
 Todos:
-- add time constraint feature
+- test out sound packs
 - refer other's code and videos to find out how the heck js files will communicate and how to keep backend and browser js files separate
 - try using express server, and see if that could serve up local files and can import other js files
-- test out sound packs
 - code refactoring and use of classes
+- implement dark and light theme
+
+
+For theme toggle:
+<div class="form-check form-switch">
+	<input class="form-check-input" type="checkbox" role="switch" id="themeSwitch" checked>
+	<label class="form-check-label" for="themeSwitch">Dark theme</label>
+</div>
+$("#themeSwitch").on('change', function(){ 
+		console.log($(this).is(':checked'));
+	}
+);
