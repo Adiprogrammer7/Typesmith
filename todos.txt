@@ -4,7 +4,7 @@ Todos:
 - try using express server, and see if that could serve up local files and can import other js files
 - code refactoring and use of classes
 - implement dark and light theme
-
+- maybe fetch from multiple sources inside getData and return array of results?
 
 For theme toggle:
 <div class="form-check form-switch">

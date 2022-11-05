@@ -7,9 +7,12 @@ let isRight = true;
 let isStarted = false;
 let min = 1;
 let sec = 10;
-timer_div.innerHTML =  String(min).padStart(2, '0') + " : " + String(sec).padStart(2, '0');
+//to nicely format the timer shown
+timer_div.innerHTML =  String(min).padStart(2, '0') + " : " + String(sec).padStart(2, '0'); 
 
 // async code to fetch text from api
+// If you use the async keyword before a function definition, you can then use await within the function. When you await a promise, the function is paused in a non-blocking way until the promise settles. If the promise fulfills, you get the value back. If the promise rejects, the rejected value is thrown.
+// The await operator is used to wait for a Promise and get its fulfillment value.
 const getData = async () => {
 	const response = await fetch('https://api.quotable.io/random?minLength=100&maxLength=600');
 	const data = await response.json();
@@ -18,9 +21,8 @@ const getData = async () => {
 getData().then((data) => {  //when promise is resolved
 	para_text = data['content'];
 	span_chars(para_text);
-	console.log(para_text);
 }).catch((e) => {  //when error occurs
-	para_text = "its some error text";
+	para_text = "Warning: some error has occured!";
 	span_chars(para_text);
 	console.log(e.message);
 });
