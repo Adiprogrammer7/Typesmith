@@ -1,12 +1,20 @@
 const p = document.getElementById("para");
 const timer_div = document.getElementById("timer");
+const wpm_div = document.getElementById("wpm");
+const accuracy_div = document.getElementById("accuracy");
 const blacklist_chars = ['Shift', 'CapsLock', 'Control', 'Alt', 'Meta', 'Backspace', 'Enter'];
-let current_char, para_text, para_len, cursor_index;
+let current_char, para_text, para_len, cursor_index, typed_chars;
 let isRight = true;
 
 let isStarted = false;
-let min = 1;
-let sec = 10;
+let initial_min = min = 1;
+let initial_sec = sec = 20;
+typed_chars = 0;
+
+// error cnt to calculate wpm and accuracy
+let total_errors = 0;
+let uncorrected_errors = 0;
+
 //to nicely format the timer shown
 timer_div.innerHTML =  String(min).padStart(2, '0') + " : " + String(sec).padStart(2, '0'); 
 
@@ -59,7 +67,6 @@ function cursor_forward(isRight){
 	if(cursor_index === Math.round(para_len/2)){
 		getData().then((data) => {  //when promise is resolved
 			para_text = data['content'];
-			console.log(para_text);
 		}).catch((e) => {  //when error occurs
 			para_text = "its some error text";
 			console.log(e.message);
@@ -69,7 +76,9 @@ function cursor_forward(isRight){
 
 // to handle timer countdown
 function timer(min, sec){
+	//setInterval() will execute this arrow function snippet repeatedly after every 1000 millisec
 	const interval_id = setInterval(() => {
+		
 		if(min == 0 && sec == 0){
 			console.log("timer done");
 			document.removeEventListener("keydown", typing_handler);
@@ -83,7 +92,13 @@ function timer(min, sec){
 			sec--;
 		}
 		//padStart() to have preceding 0 for single digit numbers.
-		timer_div.innerHTML = String(min).padStart(2, '0') + " : " + String(sec).padStart(2, '0'); 
+		timer_div.innerHTML = String(min).padStart(2, '0') + " : " + String(sec).padStart(2, '0');
+		// for calculation of wpm and accuracy
+		let time_passed = (initial_min + (initial_sec/60)) - (min + (sec/60));
+		let wpm = Math.round(((typed_chars/5) - uncorrected_errors)/time_passed);
+		let accuracy = Math.round(((typed_chars - total_errors)/typed_chars)*100);
+		wpm_div.innerHTML = wpm;
+		accuracy_div.innerHTML = accuracy;
 	}, 1000);
 }
 
@@ -96,16 +111,20 @@ function typing_handler(e){
 	}
 	// when current text is done typing
 	if(cursor_index === (para_len - 1)){
-		span_chars(para_text);
+		span_chars(para_text); //we will span the newly fetched text
 	}
 	// right character is pressed
 	else if(e.key === current_char.innerText && !(blacklist_chars.includes(e.key))){
 		isRight = true;
+		typed_chars++;
 		cursor_forward(isRight);
 	}
 	// wrong character is pressed
 	else if(!(blacklist_chars.includes(e.key))){
 		isRight = false;
+		total_errors++;
+		uncorrected_errors++;
+		typed_chars++;
 		cursor_forward(isRight);
 	}
 	// when BACKSPACE is pressed
@@ -115,8 +134,13 @@ function typing_handler(e){
 			current_char.className = ""; //to clear out classes added 
 			cursor_index--;
 			current_char = $("#para span")[cursor_index];
+			//means we are backspacing to a wrongly typed character, hence decrementing uncorrected cnt
+			if(current_char.classList.contains("warn_char")){
+				uncorrected_errors--;
+			}
 			current_char.className = ""; 
 			current_char.classList.add("cursor");
+			typed_chars--;
 		}
 	}
 }

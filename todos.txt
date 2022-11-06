@@ -5,6 +5,8 @@ Todos:
 - code refactoring and use of classes
 - implement dark and light theme
 - maybe fetch from multiple sources inside getData and return array of results?
+- one decimal of wpm and accuracy
+- popup box after time is over
 
 For theme toggle:
 <div class="form-check form-switch">
