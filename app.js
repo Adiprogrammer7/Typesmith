@@ -2,21 +2,12 @@ const p = document.getElementById("para");
 const timer_div = document.getElementById("timer");
 const wpm_div = document.getElementById("wpm");
 const accuracy_div = document.getElementById("accuracy");
+const timeupModal = document.getElementById("timeupModal")
+const darkToggle = document.getElementById("darkToggle");
 const blacklist_chars = ['Shift', 'CapsLock', 'Control', 'Alt', 'Meta', 'Backspace', 'Enter'];
-let current_char, para_text, para_len, cursor_index, typed_chars;
-let isRight = true, wpm, accuracy;
-
-let isStarted = false;
-let initial_min = min = 0;
-let initial_sec = sec = 1;
-typed_chars = 0;
-
-// error cnt to calculate wpm and accuracy
-let total_errors = 0;
-let uncorrected_errors = 0;
-
-//to nicely format the timer shown
-timer_div.innerHTML =  String(min).padStart(2, '0') + " : " + String(sec).padStart(2, '0'); 
+let current_char, typed_chars, para_text, para_len, cursor_index;
+let isRight, isStarted, wpm, accuracy, total_errors, uncorrected_errors;
+let initial_min, initial_sec, min, sec;
 
 // async code to fetch text from api
 // If you use the async keyword before a function definition, you can then use await within the function. When you await a promise, the function is paused in a non-blocking way until the promise settles. If the promise fulfills, you get the value back. If the promise rejects, the rejected value is thrown.
@@ -26,14 +17,49 @@ const getData = async () => {
 	const data = await response.json();
 	return data;
 }
-getData().then((data) => {  //when promise is resolved
-	para_text = data['content'];
-	span_chars(para_text);
-}).catch((e) => {  //when error occurs
-	para_text = "Warning: some error has occured!";
-	span_chars(para_text);
-	console.log(e.message);
-});
+
+function fetch_text(){
+	getData().then((data) => {  //when promise is resolved
+		para_text = data['content'];
+		span_chars();
+	}).catch((e) => {  //when error occurs
+		para_text = "Warning: some error has occured!";
+		span_chars();
+		console.log(e.message);
+	});
+}
+
+// to initialize variables
+function initialize(){
+	isStarted = false;
+	isRight = true
+	initial_min = min = 0;
+	initial_sec = sec = 5;
+	typed_chars = total_errors = uncorrected_errors = 0;
+	fetch_text();
+	//to nicely format the timer shown
+	timer_div.innerHTML =  String(min).padStart(2, '0') + " : " + String(sec).padStart(2, '0');
+	// for wpm and accuracy div
+	wpm_div.innerHTML = 0;
+	accuracy_div.innerHTML = 0;
+	// specifying event listener
+	document.addEventListener('keydown', typing_handler);
+}
+initialize();
+
+// // to determine curosr during cursor movement according dark or light theme
+// function add_cursor_class(){
+// 	// toggle is on
+// 	if(darkToggle.checked){
+// 		current_char.classList.remove("cursor");
+// 		current_char.classList.add("dark_theme_cursor");
+// 	}
+// 	// toggle is off
+// 	else{
+// 		current_char.classList.remove("dark_theme_cursor");
+// 		current_char.classList.add("cursor");
+// 	}
+// }
 
 // create span for each char and add it to html paragraph element
 function span_chars(){
@@ -74,9 +100,9 @@ function cursor_forward(isRight){
 	}
 }
 
+//to display popup box after timer is over
 function display_modal(){
 	$('#timeupModal').modal('show'); 
-	console.log(wpm);
 	document.getElementById("modal_wpm").innerHTML = wpm;
 	document.getElementById("modal_accuracy").innerHTML = accuracy;
 }
@@ -91,6 +117,7 @@ function timer(min, sec){
 			document.removeEventListener("keydown", typing_handler);
 			clearInterval(interval_id);
 			display_modal();
+			return;
 		}
 		else if(sec == 0){
 			sec = 59;
@@ -99,11 +126,14 @@ function timer(min, sec){
 		else{
 			sec--;
 		}
+
 		//padStart() to have preceding 0 for single digit numbers.
 		timer_div.innerHTML = String(min).padStart(2, '0') + " : " + String(sec).padStart(2, '0');
+		
 		// for calculation of wpm and accuracy
 		let time_passed = (initial_min + (initial_sec/60)) - (min + (sec/60));
 		wpm = Math.round(((typed_chars/5) - uncorrected_errors)/time_passed);
+		wpm = Math.max(0, wpm); //to avoid negative wpm values
 		accuracy = Math.round(((typed_chars - total_errors)/typed_chars)*100);
 		wpm_div.innerHTML = wpm;
 		accuracy_div.innerHTML = accuracy;
@@ -153,4 +183,25 @@ function typing_handler(e){
 	}
 }
 
-document.addEventListener('keydown', typing_handler);
+// so even when the time over modal is closed by clicking outside it, initialize function can be runned
+timeupModal.addEventListener('hidden.bs.modal', function () {
+  initialize();
+})
+
+// dark mode toggle handling
+darkToggle.addEventListener("click", function(){
+	// when toggle in on
+	if(darkToggle.checked){
+		document.body.classList.remove("light_theme");
+		document.body.classList.add("dark_theme");
+		current_char.classList.remove("cursor");
+		current_char.classList.add("dark_theme_cursor");
+	}
+	// when toggle is off
+	else{
+		document.body.classList.remove("dark_theme");
+		document.body.classList.add("light_theme");
+		current_char.classList.remove("dark_theme_cursor");
+		current_char.classList.add("cursor");		
+	}
+})

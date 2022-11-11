@@ -14,7 +14,18 @@
 } */
 
 body{
-	font-family: monospace;
+	font-family: monospace, sans-serif;
+	font-size: 1rem;
+}
+
+.light_theme{
+	background-color: #FEFBE7;
+	color: #323232;
+}
+
+.dark_theme{
+	background-color: #393E46;
+	color: #F2E7D5;
 }
 
 #para{
@@ -25,6 +36,12 @@ body{
 	background-color: darkslategrey;
 	padding: 1px;
 	color: white;
+}
+
+.dark_theme_cursor{
+	background-color: #FCFDF2;
+	padding: 1px;
+	color: darkslategray;	
 }
 
 /* .block_cursor{

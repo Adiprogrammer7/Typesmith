@@ -1,7 +1,6 @@
 Todos:
 - test out sound packs
-- run a reset function after popup
-- implement dark and light theme
+- figure out toggle for cursor, remove space key association with toggle
 - refer other's code and videos to find out how the heck js files will communicate and how to keep backend and browser js files separate
 - try using express server, and see if that could serve up local files and can import other js files
 - code refactoring and use of classes
