@@ -34,7 +34,7 @@ function initialize(){
 	isStarted = false;
 	isRight = true
 	initial_min = min = 0;
-	initial_sec = sec = 5;
+	initial_sec = sec = 30;
 	typed_chars = total_errors = uncorrected_errors = 0;
 	fetch_text();
 	//to nicely format the timer shown
