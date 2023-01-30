@@ -7,6 +7,11 @@ Todos:
 - maybe fetch from multiple sources inside getData and return array of results?
 - one decimal of wpm and accuracy
 
+https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc
+https://api.github.com/search/code?q=%20+language:python+repo:chubin/wttr.in
+https://api.github.com/repos/chubin/wttr.in/contents/lib/globals.py
+const decodeBase64Str = atob(response.content)
+
 For theme toggle:
 <div class="form-check form-switch">
 	<input class="form-check-input" type="checkbox" role="switch" id="themeSwitch" checked>

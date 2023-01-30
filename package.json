@@ -1,0 +1,15 @@
+{
+  "name": "typesmith",
+  "version": "1.0.0",
+  "description": "A minimalistic typing solution",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yash Tile",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "express": "^4.18.2"
+  }
+}
