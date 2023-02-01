@@ -1,11 +1,9 @@
 Todos:
 - test out sound packs
-- figure out toggle for cursor, remove space key association with toggle
-- refer other's code and videos to find out how the heck js files will communicate and how to keep backend and browser js files separate
-- try using express server, and see if that could serve up local files and can import other js files
+- removing other events while typing 
 - code refactoring and use of classes
-- maybe fetch from multiple sources inside getData and return array of results?
-- one decimal of wpm and accuracy
+- striping comments
+- time options
 
 https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc
 https://api.github.com/search/code?q=%20+language:python+repo:chubin/wttr.in
