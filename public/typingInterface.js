@@ -1,13 +1,24 @@
+// import { Buffer } from 'node:buffer';
 const p = document.getElementById("para");
 const timer_div = document.getElementById("timer");
 const wpm_div = document.getElementById("wpm");
 const accuracy_div = document.getElementById("accuracy");
 const timeupModal = document.getElementById("timeupModal")
 const darkToggle = document.getElementById("darkToggle");
+const programmingLanguages = ['python', 'js', 'c'];
+const select = document.querySelector('#selectLanguage');
 const blacklist_chars = ['Shift', 'CapsLock', 'Control', 'Alt', 'Meta', 'Backspace', 'Enter'];
 let current_char, typed_chars, para_text, para_len, cursor_index;
 let isRight, isStarted, wpm, accuracy, total_errors, uncorrected_errors;
 let initial_min, initial_sec, min, sec;
+
+// Populate the dropdown menu with options
+programmingLanguages.forEach(language => {
+	const option = document.createElement('option');
+	option.value = language;
+	option.textContent = language;
+	select.appendChild(option);
+});
 
 // async code to fetch text from api
 // If you use the async keyword before a function definition, you can then use await within the function. When you await a promise, the function is paused in a non-blocking way until the promise settles. If the promise fulfills, you get the value back. If the promise rejects, the rejected value is thrown.
@@ -29,6 +40,64 @@ function fetch_text(){
 	});
 }
 
+function randChoose(data){
+	let max = data['items'].length;
+	let randomNum = Math.floor(Math.random() * max);
+	return randomNum;
+}
+
+async function fetch_code(selectedLanguage) {
+	var full_repo, full_path;
+	const result = async () => {
+		const response = await fetch(`https://api.github.com/search/repositories?q=language:${selectedLanguage}&sort=stars&order=desc`); // First request
+		const data = await response.json();
+		return data;
+	}
+	result().then(function (data) {
+		// to randomally choose a repo
+		console.log(data);
+		let randomNum = randChoose(data);
+		full_repo = data['items'][randomNum]['full_name'];
+		return full_repo;
+	})
+	.then(function (full_repo) {
+		let response =	fetch(`https://api.github.com/search/code?q=%20+language:${selectedLanguage}+repo:${full_repo}`);
+		return response;
+	})
+	.then(function (response) {
+		let data = response.json();
+		console.log(full_repo);
+		return data;
+	})
+	.then(function (data) {
+		// to randomly choose a file
+		let randomNum = randChoose(data);
+		console.log(data['items'][randomNum]);
+		let full_path = data['items'][randomNum]['path'];
+		console.log(full_path);
+		response = fetch(`https://api.github.com/repos/${full_repo}/contents/${full_path}`);
+		return response;
+	})
+	.then(function (response) {
+		data = response.json();
+		return data;
+	})
+	.then(function (data) {
+		// const result = Buffer.from(data['content'], 'base64').toString('ascii');
+		const result = atob(data['content']);
+		console.log(result);
+	})
+	.catch(function (e) {
+		console.log('Error', e)
+	})
+}
+
+// Listen for changes in the dropdown menu
+select.addEventListener('change', async event => {
+	const selectedLanguage = event.target.value;
+	fetch_code(selectedLanguage);
+
+});
 // to initialize variables
 function initialize(){
 	isStarted = false;
