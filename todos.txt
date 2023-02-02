@@ -3,7 +3,7 @@ Todos:
 - code refactoring and use of classes
 - striping comments
 - time options
-- custom file upload
+- custom file upload with differnet ext and proper reading
 - dark mode modal
 - visualization
 - multiplayer

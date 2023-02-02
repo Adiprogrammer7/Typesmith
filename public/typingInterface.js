@@ -8,6 +8,7 @@ const accuracy_div = document.getElementById("accuracy");
 const timeupModal = document.getElementById("timeupModal")
 const darkToggle = document.getElementById("darkToggle");
 const select = document.querySelector('#selectLanguage');
+const fileInput = document.getElementById("fileInput");
 const blacklist_chars = ['Shift', 'CapsLock', 'Control', 'Alt', 'Meta', 'Backspace'];
 const programmingLanguages = ["plaintext", "assembly", "c", "c++", "go", "java", "javascript", "kotlin", "perl", "php", "python", "r", "ruby", "rust", "scala", "sh", "swift", "typescript"];
 let current_char, typed_chars, para_text, para_len, cursor_index;
@@ -352,11 +353,16 @@ darkToggle.addEventListener("click", function () {
 	darkToggle.blur(); //to remove the focus from it when toggle is used
 })
 
-// p.addEventListener("keydown", function (event) {
-// 	if (isStarted) {
-// 		if (event.key === "Tab" || event.key === " ") {
-// 			console.log('executing');
-// 			event.preventDefault();
-// 		}
-// 	}
-// });
+// custome file upload
+fileInput.addEventListener("change", function () {
+	const file = fileInput.files[0];
+	const reader = new FileReader();
+
+	reader.onload = function () {
+		para_text = reader.result;
+		span_chars();
+	}
+
+	reader.readAsText(file);
+	fileInput.blur(); //to remove focus from fileInput element.
+});
