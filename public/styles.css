@@ -19,7 +19,7 @@ body{
 }
 
 .light_theme{
-	background-color: #FEFBE7;
+	background-color: #F3EFE0;
 	color: #323232;
 }
 
@@ -39,7 +39,7 @@ body{
 }
 
 .dark_theme_cursor{
-	background-color: #FCFDF2;
+	background-color: #F2E7D5;
 	padding: 1px;
 	color: darkslategray;	
 }
@@ -54,5 +54,5 @@ body{
 }
 
 .done_char{
-	color: grey;
+	color: #8B7E74;
 }

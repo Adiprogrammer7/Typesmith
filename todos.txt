@@ -1,9 +1,12 @@
 Todos:
-- test out sound packs
-- removing other events while typing 
+- better stats
 - code refactoring and use of classes
 - striping comments
 - time options
+- custom file upload
+- dark mode modal
+- visualization
+- multiplayer
 
 https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc
 https://api.github.com/search/code?q=%20+language:python+repo:chubin/wttr.in

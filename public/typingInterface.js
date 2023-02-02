@@ -8,8 +8,8 @@ const accuracy_div = document.getElementById("accuracy");
 const timeupModal = document.getElementById("timeupModal")
 const darkToggle = document.getElementById("darkToggle");
 const select = document.querySelector('#selectLanguage');
-const blacklist_chars = ['Shift', 'CapsLock', 'Control', 'Alt', 'Meta', 'Backspace', 'Enter'];
-const programmingLanguages = ["plaintext", "assembly", "c", "c++", "go", "java", "javascript", "kotlin", "objective-c", "perl", "php", "python", "r", "ruby", "rust", "scala", "sh", "swift", "typescript"];
+const blacklist_chars = ['Shift', 'CapsLock', 'Control', 'Alt', 'Meta', 'Backspace'];
+const programmingLanguages = ["plaintext", "assembly", "c", "c++", "go", "java", "javascript", "kotlin", "perl", "php", "python", "r", "ruby", "rust", "scala", "sh", "swift", "typescript"];
 let current_char, typed_chars, para_text, para_len, cursor_index;
 let isRight, isStarted, wpm, accuracy, total_errors, uncorrected_errors;
 let initial_min, initial_sec, min, sec;
@@ -123,7 +123,7 @@ async function fetch_code(selectedLanguage) {
 		.then(function (data) {
 			// const result = Buffer.from(data['content'], 'base64').toString('ascii');
 			const result = atob(data['content']);
-			console.log(result);
+			// console.log(result);
 			let formatted_code = format_code(result, 30);
 			para_text = formatted_code;
 			span_chars();
@@ -161,7 +161,7 @@ function text_or_code(){
 select.addEventListener('change', async event => {
 	// const selectedLanguage = event.target.value;
 	text_or_code();
-
+	select.blur(); //to remove focus from dropdown after option selected 
 });
 
 // to initialize variables
@@ -182,19 +182,29 @@ function initialize() {
 }
 initialize();
 
-// // to determine curosr during cursor movement according dark or light theme
-// function add_cursor_class(){
-// 	// toggle is on
-// 	if(darkToggle.checked){
-// 		current_char.classList.remove("cursor");
-// 		current_char.classList.add("dark_theme_cursor");
-// 	}
-// 	// toggle is off
-// 	else{
-// 		current_char.classList.remove("dark_theme_cursor");
-// 		current_char.classList.add("cursor");
-// 	}
-// }
+// to add cursor class style based upon theme
+function add_cursor(char){
+	// dark mode
+	if(darkToggle.checked){
+		char.classList.add("dark_theme_cursor");
+	}
+	// white mode
+	else{
+		char.classList.add("cursor");
+	}
+}
+
+// to remove cursor class style based upon theme
+function remove_cursor(char){
+	// dark mode
+	if(darkToggle.checked){
+		char.classList.remove("dark_theme_cursor");
+	}
+	// white mode
+	else{
+		char.classList.remove("cursor");
+	}
+}
 
 // create span for each char and add it to html paragraph element
 function span_chars() {
@@ -209,12 +219,12 @@ function span_chars() {
 	}
 	// adding cursor to the first char
 	current_char = $("#para span")[cursor_index];
-	current_char.classList.add("cursor");
+	add_cursor(current_char);
 }
 
 // the way cursor will move to next char depending upon if right or wrong key was pressed
 function cursor_forward(isRight) {
-	current_char.classList.remove("cursor");
+	remove_cursor(current_char);
 	if (isRight) {
 		current_char.classList.add("done_char");
 	}
@@ -223,7 +233,7 @@ function cursor_forward(isRight) {
 	}
 	cursor_index++;
 	current_char = $("#para span")[cursor_index];
-	current_char.classList.add("cursor");
+	add_cursor(current_char);
 	// // to fetch the next text in advance when half of the previous text is done typing
 	// if (cursor_index === Math.round(para_len / 2)) {
 	// 	text_or_code();
@@ -277,6 +287,10 @@ function typing_handler(e) {
 		isStarted = true;
 		timer(min, sec);
 	}
+	// to prevent getting off track from typing interface or avoid selecting other elements on screen or scrolling document.
+	if(e.key === ' ' || e.key === 'Tab'){
+		e.preventDefault();
+	}
 	// when current text is done typing
 	if (cursor_index === (para_len - 1)) {
 		text_or_code();
@@ -308,7 +322,7 @@ function typing_handler(e) {
 				uncorrected_errors--;
 			}
 			current_char.className = "";
-			current_char.classList.add("cursor");
+			add_cursor(current_char);
 			typed_chars--;
 		}
 	}
@@ -335,4 +349,14 @@ darkToggle.addEventListener("click", function () {
 		current_char.classList.remove("dark_theme_cursor");
 		current_char.classList.add("cursor");
 	}
+	darkToggle.blur(); //to remove the focus from it when toggle is used
 })
+
+// p.addEventListener("keydown", function (event) {
+// 	if (isStarted) {
+// 		if (event.key === "Tab" || event.key === " ") {
+// 			console.log('executing');
+// 			event.preventDefault();
+// 		}
+// 	}
+// });
