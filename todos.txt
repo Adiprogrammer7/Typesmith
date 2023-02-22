@@ -1,4 +1,5 @@
 Todos:
+- user authentication and login
 - better stats
 - code refactoring and use of classes
 - striping comments
