@@ -23,3 +23,21 @@ $("#themeSwitch").on('change', function(){
 		console.log($(this).is(':checked'));
 	}
 );
+
+to discard un commited changes:
+git stash save --keep-index --include-untracked
+
+<% if (error) { %>
+      <div class="alert alert-danger"><%= error %></div>
+    <% } %>
+
+<% if (errorMessage) { %>
+      <div class="alert alert-danger"><%= errorMessage %></div>
+    <% } %>
+
+CREATE TABLE users
+(
+    id serial primary key,
+    email varchar(60) unique not null,
+    password varchar(60) not null
+);

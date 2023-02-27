@@ -9,8 +9,10 @@
   "author": "Yash Tile",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
+    "express-session": "^1.17.3",
     "pg": "^8.9.0",
     "strip-comments": "^2.0.1"
   }
