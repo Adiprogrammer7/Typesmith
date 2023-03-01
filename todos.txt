@@ -41,3 +41,22 @@ CREATE TABLE users
     email varchar(60) unique not null,
     password varchar(60) not null
 );
+
+CREATE TABLE avatar (
+    avatar_id serial PRIMARY KEY,
+    username VARCHAR(50) UNIQUE,
+    avatar_character VARCHAR(50),
+    xp INTEGER,
+    avg_accuracy FLOAT,
+    avg_wpm FLOAT,
+    level INTEGER,
+    user_id INTEGER UNIQUE,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+<% if (error) { %>
+			<div class="alert alert-danger">
+				<%= error %>
+			</div>
+		<% } %>
+fix flash

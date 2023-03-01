@@ -18,6 +18,20 @@
 </head>
 <body class="light_theme">
 	<div class="container p-5 mt-3">
+		<!-- user avatar -->
+		<div class="dropdown">
+			<a class="btn dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown"
+				aria-expanded="false">
+				<img src="../public/images/<%= message %>.png" alt="User Avatar" class="rounded-circle" width="32" height="32">
+			</a>
+			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+				<li>
+					<hr class="dropdown-divider">
+				</li>
+				<li><a class="dropdown-item" href="/logout">Logout</a></li>
+			</ul>
+		</div>
+		  
 		<!-- dropdown to select language -->
 		<select id="selectLanguage">
 
