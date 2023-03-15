@@ -54,6 +54,7 @@ class User {
 	async comparePassword(password) {
 		return await bcrypt.compare(password, this.password);
 	}
+
 }
 
 module.exports = User;

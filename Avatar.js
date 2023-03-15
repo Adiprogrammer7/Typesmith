@@ -51,6 +51,24 @@ class Avatar {
 			client.release();
 		}
 	}
+
+	static async save_typing_session(wpm, accuracy, avatar_id){
+		let client;
+		try {
+			client = await pool.connect();
+			const result = await client.query(
+				'INSERT INTO typing_session (wpm, accuracy, avatar_id) VALUES ($1, $2, $3) RETURNING session_id',
+				[wpm, accuracy, avatar_id]
+			);
+			return result.rows[0];
+		} 
+		catch(e){
+			console.log(e.message)
+		}
+		finally {
+			client.release();
+		}
+	}
 }
 
 module.exports = Avatar;

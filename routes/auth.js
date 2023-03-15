@@ -15,8 +15,11 @@ router.post('/login', async (req, res) => {
 		req.session.userId = user.id;
 		console.log("login done, id: ", user.id);
 		let result = await Avatar.alreadyExists(req.session.userId);
+		console.log(result);
+		req.session.username = result.username;
+		req.session.avatar_id = result.avatar_id;
 		req.session.avatar = result.avatar_character;
-		console.log(req.session.avatar);
+		console.log("Avatar id after login: ", req.session.avatar_id);
 		res.redirect('/');
 	} else {
 		res.render('login', { error: 'Invalid email or password.' });

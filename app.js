@@ -7,6 +7,7 @@ const avatarRoutes = require('./routes/avatarRoutes');
 var cookieParser = require("cookie-parser")
 var flash = require('connect-flash');
 
+const Avatar = require('./Avatar');
 
 const app = express();
 
@@ -20,21 +21,38 @@ app.use('/', avatarRoutes);
 app.use(cookieParser("your-secret-key"));
 app.use(flash());
 
+
 app.use(function(req, res, next){
     res.locals.success = req.flash("success");
   	res.locals.error = req.flash("error");
     next();
 });
 
-app.get("/", (req, res) => {
+app.get("/", async (req, res) => {
 	if(req.session.userId){
-		res.render('index', { message: req.session.avatar });
+		// console.log(typing_session);
+		res.render('index', { avatar_character: req.session.avatar, userId: req.session.userId });
+		// let data =  await typing_session();
+		// if(data){
+		// 	console.log("data");
+		// }
+		// else{
+		// 	console.log("nopeee");
+		// }
+		// console.log("after render");
 	}
 	else{
 		res.render('login');
 	}
 });
 
+app.post('/typing_session', async function(req, res) {
+	let wpm = req.body.wpm;
+	let accuracy = req.body.accuracy;
+	console.log('ajax data of typing session:', wpm, accuracy);
+	let result = await Avatar.save_typing_session(wpm, accuracy, req.session.avatar_id);
+	console.log(result);
+});
 
 // to run server on port
 const port = process.env.PORT || 5000;

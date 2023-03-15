@@ -22,7 +22,7 @@
 		<div class="dropdown">
 			<a class="btn dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown"
 				aria-expanded="false">
-				<img src="../public/images/<%= message %>.png" alt="User Avatar" class="rounded-circle" width="32" height="32">
+				<img src="../images/<%= avatar_character %>.png" alt="User Avatar" class="rounded-circle" width="32" height="32">
 			</a>
 			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
 				<li>
@@ -97,6 +97,11 @@
 	<!-- strip-comment
 	<script src="https://unpkg.com/strip-comments"></script> -->
 	<!-- js -->
+	<script type="text/javascript">
+		var aa = "I am aaa!";
+		var uu = <%=userId%>;
+		console.log(uu);
+	</script>
 	<script src="/typingInterface.js"></script>
 </body>
 </html>

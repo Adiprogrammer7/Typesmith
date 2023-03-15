@@ -1,6 +1,3 @@
-// import { Buffer } from 'node:buffer';
-// const stripComments = require('strip-comments');
-// var stripComments = require("strip-comments");
 const p = document.getElementById("para");
 const timer_div = document.getElementById("timer");
 const wpm_div = document.getElementById("wpm");
@@ -22,7 +19,8 @@ programmingLanguages.forEach(language => {
 	option.textContent = language;
 	select.appendChild(option);
 });
-
+console.log(aa);
+console.log(uu);
 // async code to fetch text from api
 // If you use the async keyword before a function definition, you can then use await within the function. When you await a promise, the function is paused in a non-blocking way until the promise settles. If the promise fulfills, you get the value back. If the promise rejects, the rejected value is thrown.
 // The await operator is used to wait for a Promise and get its fulfillment value.
@@ -248,6 +246,22 @@ function display_modal() {
 	document.getElementById("modal_accuracy").innerHTML = accuracy;
 }
 
+// to send wpm and accuracy to server js to be able to save in db
+function send_stats(wpm, accuracy){
+    console.log("ajax triggered");
+    $.ajax({
+        type: 'POST',
+        url: '/typing_session',
+        data: { wpm: wpm, accuracy: accuracy },
+        success: function(response) {
+          console.log('stat send done');
+        },
+        error: function(error) {
+          console.log('Error in sending stats');
+        }
+    });
+}
+
 // to handle timer countdown
 function timer(min, sec) {
 	//setInterval() will execute this arrow function snippet repeatedly after every 1000 millisec
@@ -258,6 +272,7 @@ function timer(min, sec) {
 			document.removeEventListener("keydown", typing_handler);
 			clearInterval(interval_id);
 			display_modal();
+			send_stats(wpm, accuracy)
 			return;
 		}
 		else if (sec == 0) {
@@ -366,3 +381,4 @@ fileInput.addEventListener("change", function () {
 	reader.readAsText(file);
 	fileInput.blur(); //to remove focus from fileInput element.
 });
+

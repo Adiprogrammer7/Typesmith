@@ -1,5 +1,4 @@
 Todos:
-- user authentication and login
 - better stats
 - code refactoring and use of classes
 - striping comments
@@ -47,9 +46,8 @@ CREATE TABLE avatar (
     username VARCHAR(50) UNIQUE,
     avatar_character VARCHAR(50),
     xp INTEGER,
-    avg_accuracy FLOAT,
-    avg_wpm FLOAT,
     level INTEGER,
+	health INTEGER,
     user_id INTEGER UNIQUE,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
@@ -60,3 +58,24 @@ CREATE TABLE avatar (
 			</div>
 		<% } %>
 fix flash
+
+to delete last n rows:
+DELETE FROM users
+WHERE id IN (
+    SELECT id
+    FROM users
+    ORDER BY id DESC
+    LIMIT 3
+);
+
+CREATE TABLE typing_session (
+    session_id SERIAL PRIMARY KEY,
+    session_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    wpm FLOAT NOT NULL,
+    accuracy FLOAT NOT NULL,
+	avatar_id INTEGER NOT NULL,
+  	FOREIGN KEY (avatar_id) REFERENCES avatar(avatar_id)
+);
+
+npm i --save-dev nodemon
+

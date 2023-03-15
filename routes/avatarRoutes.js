@@ -13,14 +13,21 @@ router.get('/avatar', (req, res) => {
 });
 
 router.post('/avatar', async (req, res) => {
-	if(!await Avatar.alreadyExists(req.session.userId)){
+	let result = await Avatar.alreadyExists(req.session.userId);
+	if(!result){
 		const { username, avatar } = req.body;
 		console.log(username);
 		console.log(avatar);
 		const avatar_obj = new Avatar(req.session.userId, username, avatar);
 		try {
 			await avatar_obj.save();
-			req.session.avatar = avatar;
+			result = await Avatar.alreadyExists(req.session.userId);
+			console.log(result);
+			req.session.username = result.username;
+			req.session.avatar_id = result.avatar_id;
+			req.session.avatar = result.avatar_character;
+			console.log("Avatar id after avatar creation: ", req.session.avatar_id);
+			// req.session.avatar = avatar;
 			res.redirect("/");
 		} catch (error) {
 			console.log(error.message);
