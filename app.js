@@ -47,11 +47,18 @@ app.get("/", async (req, res) => {
 });
 
 app.post('/typing_session', async function(req, res) {
-	let wpm = req.body.wpm;
-	let accuracy = req.body.accuracy;
-	console.log('ajax data of typing session:', wpm, accuracy);
-	let result = await Avatar.save_typing_session(wpm, accuracy, req.session.avatar_id);
-	console.log(result);
+	try{
+		let wpm = req.body.wpm;
+		let accuracy = req.body.accuracy;
+		console.log('ajax data of typing session:', wpm, accuracy);
+		let result = await Avatar.save_typing_session(wpm, accuracy, req.session.avatar_id);
+		console.log(result);
+		result = await Avatar.update_avg_stats(req.session.avatar_id);
+		console.log(result);
+	}
+	catch(e){
+		console.log(e.message());
+	}
 });
 
 // to run server on port

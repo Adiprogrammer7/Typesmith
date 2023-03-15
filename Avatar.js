@@ -69,6 +69,26 @@ class Avatar {
 			client.release();
 		}
 	}
+
+	// to update avg_wpm and avg_accuracy in avatar after each typing session
+	static async update_avg_stats(avatar_id){
+		let client;
+		try {
+			client = await pool.connect();
+			const result = await client.query(
+				"UPDATE avatar SET avg_wpm = (SELECT AVG(wpm) FROM typing_session WHERE avatar_id = $1), avg_accuracy = (SELECT AVG(accuracy) FROM typing_session WHERE avatar_id = $1) WHERE avatar_id = $1",
+				[avatar_id]
+			);
+			return result.rows;
+		} 
+		catch(e){
+			console.log(e.message)
+		}
+		finally {
+			client.release();
+		}
+	}
+
 }
 
 module.exports = Avatar;
