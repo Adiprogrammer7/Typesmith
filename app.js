@@ -62,10 +62,13 @@ app.post('/typing_session', async function(req, res) {
 });
 
 app.get('/plots', async function(req, res) {
-	let {plotData, layout} = await Avatar.plot_stats(req.session.avatar_id);
-	console.log("plotData: ", plotData);
-	console.log("layout: ", layout);
-	res.render('plots', {plotData: String(plotData), layout: String(layout)});
+	if(req.session.userId){
+		let {plotData, layout} = await Avatar.plot_stats(req.session.avatar_id, req.session.username);
+		res.render('plots', {plotData: plotData, layout: layout});
+	}
+	else{
+		res.redirect('login');
+	}
 });
 
 // to run server on port

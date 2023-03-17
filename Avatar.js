@@ -90,7 +90,7 @@ class Avatar {
 	}
 
 	// to plot wpm and accuracy
-	static async plot_stats(avatar_id){
+	static async plot_stats(avatar_id, username){
 		let client;
 		try {
 			client = await pool.connect();
@@ -113,20 +113,16 @@ class Avatar {
 				name: 'Accuracy'
 			};
 
-			const layout = {
-				title: `Typing Session for Avatar ${avatar_id}`,
+			let layout = {
+				title: `WPM and Accuracy of ${username} over time: `,
 				xaxis: {
 					title: 'Session Date'
 				},
 				yaxis: {
-					title: 'Value'
+					title: 'Values'
 				}
 			};
-			console.log(wpmData);
-			console.log(accuracyData);
-			const plotData = [wpmData, accuracyData];
-			console.log(plotData);
-			console.log(layout);
+			let plotData = [wpmData, accuracyData];
 			return {plotData, layout};
 		} 
 		catch(e){
