@@ -1,11 +1,9 @@
 Todos:
-- better stats
+- stats on plots page 
+- better looking avatar, plots page
+- font sizes
+- add icons
 - code refactoring and use of classes
-- striping comments
-- time options
-- custom file upload with differnet ext and proper reading
-- dark mode modal
-- visualization
 - multiplayer
 
 https://api.github.com/search/repositories?q=language:python&sort=stars&order=desc

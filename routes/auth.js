@@ -45,8 +45,7 @@ router.post('/signup', async (req, res) => {
 		}
 	}
 	else{
-		req.flash('error', "Passwords don't match!");
-        res.render('signup');
+        res.render('signup', { error: "Passwords don't match!" });
 	}
 });
 

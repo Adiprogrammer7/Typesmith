@@ -31,7 +31,7 @@ app.use(function(req, res, next){
 app.get("/", async (req, res) => {
 	if(req.session.userId){
 		// console.log(typing_session);
-		res.render('index', { avatar_character: req.session.avatar, userId: req.session.userId });
+		res.render('index', { username: req.session.username, avatar_character: req.session.avatar, userId: req.session.userId });
 		// let data =  await typing_session();
 		// if(data){
 		// 	console.log("data");
@@ -42,7 +42,7 @@ app.get("/", async (req, res) => {
 		// console.log("after render");
 	}
 	else{
-		res.render('login');
+		res.redirect('/login');
 	}
 });
 
