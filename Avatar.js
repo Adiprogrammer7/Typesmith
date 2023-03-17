@@ -89,6 +89,54 @@ class Avatar {
 		}
 	}
 
+	// to plot wpm and accuracy
+	static async plot_stats(avatar_id){
+		let client;
+		try {
+			client = await pool.connect();
+			const result = await client.query(
+				"SELECT wpm, accuracy, session_date FROM typing_session WHERE avatar_id = $1 ORDER BY session_date",
+				[avatar_id]
+			);
+			// return result.rows;
+			const wpmData = {
+				x: result.rows.map(row => row.session_date),
+				y: result.rows.map(row => row.wpm),
+				type: 'scatter',
+				name: 'WPM'
+			};
+
+			const accuracyData = {
+				x: result.rows.map(row => row.session_date),
+				y: result.rows.map(row => row.accuracy),
+				type: 'scatter',
+				name: 'Accuracy'
+			};
+
+			const layout = {
+				title: `Typing Session for Avatar ${avatar_id}`,
+				xaxis: {
+					title: 'Session Date'
+				},
+				yaxis: {
+					title: 'Value'
+				}
+			};
+			console.log(wpmData);
+			console.log(accuracyData);
+			const plotData = [wpmData, accuracyData];
+			console.log(plotData);
+			console.log(layout);
+			return {plotData, layout};
+		} 
+		catch(e){
+			console.log(e.message)
+		}
+		finally {
+			client.release();
+		}
+	}
+
 }
 
 module.exports = Avatar;

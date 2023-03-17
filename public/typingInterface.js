@@ -10,7 +10,7 @@ const blacklist_chars = ['Shift', 'CapsLock', 'Control', 'Alt', 'Meta', 'Backspa
 const programmingLanguages = ["plaintext", "assembly", "c", "c++", "go", "java", "javascript", "kotlin", "perl", "php", "python", "r", "ruby", "rust", "scala", "sh", "swift", "typescript"];
 let current_char, typed_chars, para_text, para_len, cursor_index;
 let isRight, isStarted, wpm, accuracy, total_errors, uncorrected_errors;
-let initial_min, initial_sec, min, sec;
+let initial_min, initial_sec, min, sec, minutes = 1;
 
 // Populate the dropdown menu with options
 programmingLanguages.forEach(language => {
@@ -29,6 +29,37 @@ const getData = async () => {
 	const data = await response.json();
 	return data;
 }
+
+function initialize_time(minutes){
+	const m = Math.floor(minutes);
+	const s = Math.floor((minutes - m) * 60);
+	const formattedTime = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+	console.log(formattedTime); 
+	timer_div.innerHTML = formattedTime;
+	initial_min = min = m;
+	initial_sec = sec = s;
+}
+
+$(document).ready(function() {
+    $("#time-slider").ionRangeSlider({
+        type: "double",
+        grid: true,
+        min: 0,
+        max: 15,
+        from: 0,
+        to: 1,
+        step: 1,
+        postfix: " minutes",
+        prettify: false,
+		from_fixed: true,
+		hide_min_max: true,
+		keyboard: false,
+        onChange: function (data) {
+            minutes = data.to - data.from;
+			initialize_time(minutes);
+        }
+    });
+});
 
 async function fetch_text() {
 	getData().then((data) => {  //when promise is resolved
@@ -146,16 +177,6 @@ function text_or_code(){
 	return para_text;
 }
 
-// text_or_code().then(() => {
-// 	// code to execute after text_or_code is done executing
-// 	span_chars();
-// });
-
-// // when document is first loaded read dropdown
-// document.addEventListener("DOMContentLoaded", function() {
-// 	text_or_code(select.value);
-// });
-
 // Listen for changes in the dropdown menu
 select.addEventListener('change', async event => {
 	// const selectedLanguage = event.target.value;
@@ -167,12 +188,13 @@ select.addEventListener('change', async event => {
 function initialize() {
 	isStarted = false;
 	isRight = true
-	initial_min = min = 0;
-	initial_sec = sec = 60;
+	// initial_min = min = 0;
+	// initial_sec = sec = 60;
 	typed_chars = total_errors = uncorrected_errors = 0;
 	text_or_code(); //fetch based on dropdown menu
 	//to nicely format the timer shown
-	timer_div.innerHTML = String(min).padStart(2, '0') + " : " + String(sec).padStart(2, '0');
+	// timer_div.innerHTML = String(min).padStart(2, '0') + " : " + String(sec).padStart(2, '0');
+	initialize_time(minutes);
 	// for wpm and accuracy div
 	wpm_div.innerHTML = 0;
 	accuracy_div.innerHTML = 0;

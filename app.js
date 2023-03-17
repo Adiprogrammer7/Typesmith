@@ -61,6 +61,13 @@ app.post('/typing_session', async function(req, res) {
 	}
 });
 
+app.get('/plots', async function(req, res) {
+	let {plotData, layout} = await Avatar.plot_stats(req.session.avatar_id);
+	console.log("plotData: ", plotData);
+	console.log("layout: ", layout);
+	res.render('plots', {plotData: String(plotData), layout: String(layout)});
+});
+
 // to run server on port
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
