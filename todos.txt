@@ -1,5 +1,5 @@
 Todos:
-- stats on plots page 
+- stats on plots page: avg, last typing stats
 - better looking avatar, plots page
 - font sizes
 - add icons
@@ -76,4 +76,6 @@ CREATE TABLE typing_session (
 );
 
 npm i --save-dev nodemon
+
+DELETE FROM typing_session WHERE accuracy = 'NaN';
 

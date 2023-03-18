@@ -9,8 +9,13 @@ const fileInput = document.getElementById("fileInput");
 const blacklist_chars = ['Shift', 'CapsLock', 'Control', 'Alt', 'Meta', 'Backspace'];
 const programmingLanguages = ["plaintext", "assembly", "c", "c++", "go", "java", "javascript", "kotlin", "perl", "php", "python", "r", "ruby", "rust", "scala", "sh", "swift", "typescript"];
 let current_char, typed_chars, para_text, para_len, cursor_index;
-let isRight, isStarted, wpm, accuracy, total_errors, uncorrected_errors;
+let isRight, isStarted, wpm = 0, accuracy = 0, total_errors, uncorrected_errors;
 let initial_min, initial_sec, min, sec, minutes = 1;
+//to store wpm, accuracy values over defined intervals.
+let intervals;
+let interval_wpm = [];
+let interval_accuracy = [];
+interval_handling(minutes);
 
 // Populate the dropdown menu with options
 programmingLanguages.forEach(language => {
@@ -19,8 +24,9 @@ programmingLanguages.forEach(language => {
 	option.textContent = language;
 	select.appendChild(option);
 });
-console.log(aa);
-console.log(uu);
+
+
+
 // async code to fetch text from api
 // If you use the async keyword before a function definition, you can then use await within the function. When you await a promise, the function is paused in a non-blocking way until the promise settles. If the promise fulfills, you get the value back. If the promise rejects, the rejected value is thrown.
 // The await operator is used to wait for a Promise and get its fulfillment value.
@@ -40,6 +46,17 @@ function initialize_time(minutes){
 	initial_sec = sec = s;
 }
 
+function interval_handling(minutes){
+	let sessionLength = minutes * 60; // session length in seconds
+	let intervalLength = 20; // interval length in seconds
+	intervals = Array.from(
+		{ length: sessionLength / intervalLength },
+		(_, i) => (i + 1) * intervalLength
+	);
+	intervals.unshift(0);
+	console.log("interval: ", intervals);
+}
+
 $(document).ready(function() {
     $("#time-slider").ionRangeSlider({
         type: "double",
@@ -57,6 +74,7 @@ $(document).ready(function() {
         onChange: function (data) {
             minutes = data.to - data.from;
 			initialize_time(minutes);
+			interval_handling(minutes);
         }
     });
 });
@@ -269,12 +287,12 @@ function display_modal() {
 }
 
 // to send wpm and accuracy to server js to be able to save in db
-function send_stats(wpm, accuracy){
+function send_stats(wpm, accuracy, intervals, interval_wpm, interval_accuracy){
     console.log("ajax triggered");
     $.ajax({
         type: 'POST',
         url: '/typing_session',
-        data: { wpm: wpm, accuracy: accuracy },
+        data: { wpm: wpm, accuracy: accuracy, intervals: intervals, interval_wpm: interval_wpm, interval_accuracy: interval_accuracy },
         success: function(response) {
           console.log('stat send done');
         },
@@ -288,13 +306,21 @@ function send_stats(wpm, accuracy){
 function timer(min, sec) {
 	//setInterval() will execute this arrow function snippet repeatedly after every 1000 millisec
 	const interval_id = setInterval(() => {
+		console.log(JSON.stringify(intervals));
+		// for stats along typing session for definite intervals
+		if(intervals.includes((min * 60) + sec)){
+			console.log((min * 60) + sec);
+			interval_accuracy.push(accuracy);
+			interval_wpm.push(wpm);
+		}
 
 		if (min == 0 && sec == 0) {
 			console.log("timer done");
 			document.removeEventListener("keydown", typing_handler);
 			clearInterval(interval_id);
 			display_modal();
-			send_stats(wpm, accuracy)
+			send_stats(wpm, accuracy, intervals, interval_wpm, interval_accuracy);
+			console.log(interval_accuracy, interval_wpm);
 			return;
 		}
 		else if (sec == 0) {
